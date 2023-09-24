@@ -128,3 +128,16 @@
 
 
 # checkcheck(5, 1)
+
+
+def square(num):
+    return num**2
+
+
+my_nums = [1, 2, 3, 4, 5]
+
+
+# for el in map(square, my_nums):
+# print(el)
+
+# print(list(map(square, my_nums)))
