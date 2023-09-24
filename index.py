@@ -116,3 +116,15 @@
 
 
 # print(name_function("shit"))
+
+
+# def checkcheck(a, b):
+#     if a > b:
+#         print("a is bigger")
+#     elif b > a:
+#         print("b is bigger")
+#     else:
+#         print("they same")
+
+
+# checkcheck(5, 1)
