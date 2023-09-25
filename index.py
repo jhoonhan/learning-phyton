@@ -130,14 +130,36 @@
 # checkcheck(5, 1)
 
 
-def square(num):
-    return num**2
+# def square(num):
+# return num**2
 
 
-my_nums = [1, 2, 3, 4, 5]
+# my_nums = [1, 2, 3, 4, 5]
 
 
 # for el in map(square, my_nums):
 # print(el)
 
 # print(list(map(square, my_nums)))
+
+
+# lexical_name = 1
+
+
+# def lexcal_function():
+#     print("first level")
+#     print(lexical_name)
+#     lexical_name = 2
+
+#     def lexical_function2():
+#         print("second level")
+#         print(lexical_name)
+
+#     lexical_function2()
+
+
+# lexcal_function()
+
+test_list = [1, 2, 3, 4, 5]
+# for el in test_list:
+# print(el)
