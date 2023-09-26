@@ -185,6 +185,14 @@ row2 = ["O", "O", "O"]
 row3 = ["O", "O", "O"]
 rows = [row1, row2, row3]
 
+
+def display_rows():
+    print("\n")
+    print(row1)
+    print(row2)
+    print(row3)
+
+
 # User Controller
 user_turn = True
 user_turn_count = 0
@@ -229,25 +237,37 @@ while user_turn_count < 10:
     # Input validation: See if the input is empty string
     validated_input_row = input_validation(user_selection_row)
     if validated_input_row != None:
-        user_selection_col = input(
-            f"\nYou have picked row {user_selection_row}, \nPick a column between 0,1,2 : "
-        )
-        # Input validation: See if the input is empty string
-        validated_input_col = input_validation(user_selection_col)
-        if validated_input_col != None:
-            # Log it to the rows
-            loggable = log_user_input(
-                int(validated_input_row), int(validated_input_col)
-            )
-            if loggable == True:
-                # Increase user count
-                user_turn_count += 1
-                # Change the turn
-                user_turn = not user_turn
-                print(row1)
-                print(row2)
-                print(row3)
-            else:
-                pass
-    else:
+        print("passed function")
         pass
+    else:
+        print("breaking function")
+        break
+    # validated_input_col = input_validation(user_selection_col)
+    # if validated_input_col != None:
+    #     pass
+
+    # if validated_input_row == True and validated_input_col == True
+    #     # Run the final pass function
+    #     pass
+
+    # if validated_input_row != None:
+    #     user_selection_col = input(
+    #         f"\nYou have picked row {user_selection_row}, \nPick a column between 0,1,2 : "
+    #     )
+    #     # Input validation: See if the input is empty string
+    #     validated_input_col = input_validation(user_selection_col)
+    #     if validated_input_col != None:
+    #         # Log it to the rows
+    #         loggable = log_user_input(
+    #             int(validated_input_row), int(validated_input_col)
+    #         )
+    #         if loggable == True:
+    #             # Increase user count
+    #             user_turn_count += 1
+    #             # Change the turn
+    #             user_turn = not user_turn
+    #             display_rows()
+    #         else:
+    #             pass
+    # else:
+    #     pass
