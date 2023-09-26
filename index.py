@@ -211,22 +211,13 @@ def input_validation_none(user_selection):
 
 # Keep asking for input
 while user_turn_count < 10:
+    print(f"Current turn: {user_turn_count}")
+
     # Ask for row and col
     user_selection = input("Pick a Row between 0,1,2 :")
     # Input validation: See if the input is empty string
-    input_validation_none(user_selection)
-
-    # # Input interger is greater or equal to 3?
-    # if user_selection_int <= 3:
-    #     print("Wrong row")
-    #     user_selection = input("Pick a Row between 0,1,2 :")
-    #     user_selection_int = int(user_selection)
-    # # Next turn
-    # else:
-    #     print("Next turn")
-
-    #     # Increast count
-    #     user_turn_count += 1
-
-    #     # Modify col
-    #     print("Modifying col")
+    validated_input = input_validation_none(user_selection)
+    if validated_input != None:
+        user_turn_count += 1
+    else:
+        pass
