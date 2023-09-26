@@ -160,6 +160,73 @@
 
 # lexcal_function()
 
-test_list = [1, 2, 3, 4, 5]
+# test_list = [1, 2, 3, 4, 5]
 # for el in test_list:
 # print(el)
+# x = 20
+
+
+# def func():
+#     print(x)
+
+
+# func()
+
+# user_input1 = input("aanag : ")
+
+# print(user_input1)
+
+
+# Tik Tak Toe
+
+# rows
+row1 = [False, False, False]
+row2 = [False, False, False]
+row3 = [False, False, False]
+
+# User Controller
+user_turn = True
+user_turn_count = 0
+
+# User Selection Controller
+user_selection = None
+
+
+# Input Validation 1: None || String
+def input_validation_none(user_selection):
+    if user_selection == "" or user_selection == None:
+        print("Wrong input. Must be a number")
+        return None
+    else:
+        return user_selection
+
+
+# # Input Validation 2: Boolean
+# def input_validation_number(user_selection_int):
+#     if user_selection_int <= 3:
+#         print("Wrong row")
+#         user_selection = input("Pick a Row between 0,1,2 :")
+#         user_selection_int = int(user_selection)
+
+
+# Keep asking for input
+while user_turn_count < 10:
+    # Ask for row and col
+    user_selection = input("Pick a Row between 0,1,2 :")
+    # Input validation: See if the input is empty string
+    input_validation_none(user_selection)
+
+    # # Input interger is greater or equal to 3?
+    # if user_selection_int <= 3:
+    #     print("Wrong row")
+    #     user_selection = input("Pick a Row between 0,1,2 :")
+    #     user_selection_int = int(user_selection)
+    # # Next turn
+    # else:
+    #     print("Next turn")
+
+    #     # Increast count
+    #     user_turn_count += 1
+
+    #     # Modify col
+    #     print("Modifying col")
