@@ -251,9 +251,6 @@ def display_rows():
 
 # Check if won
 def check_won(game_finished):
-    if user_turn_count == 0:
-        pass
-
     # Horizontal
     won_sequence = ["OOO", "XXX"]
     for row in rows:
@@ -287,12 +284,17 @@ while user_turn_count < 10:
 
     print(f"User {get_user_name(user_turn)}'s turn")
 
+    # Validate first input
     passed_first = get_input("Pick a row between 0,1,2 : ")
+
+    # Validate second input IF first validation succesful
     passed_second = None
     if passed_first != None:
         passed_second = get_input(
             f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : "
         )
+    else:
+        pass
 
     # All pased. Log the result, change turn, and add turn count
     if passed_first != None and passed_second != None:
