@@ -218,7 +218,7 @@ def input_validation(user_selection):
 
 
 # Validation Fn (str):Boolean
-def get_input(message):
+def get_input(message, check_previous=None):
     user_input = input(message)
     validated_input = input_validation(user_input)
     if validated_input != None:
@@ -291,7 +291,8 @@ while user_turn_count < 10:
     passed_second = None
     if passed_first != None:
         passed_second = get_input(
-            f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : "
+            f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : ",
+            True,
         )
     else:
         pass
