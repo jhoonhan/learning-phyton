@@ -187,7 +187,7 @@ rows = [row0, row1, row2]
 
 
 # User Controller
-has_won = False
+game_finished = False
 user_turn = True
 user_turn_count = 0
 
@@ -250,33 +250,35 @@ def display_rows():
 
 
 # Check if won
-def check_won(has_won):
+def check_won(game_finished):
+    if user_turn_count == 0:
+        pass
+
     # Horizontal
     won_sequence = ["OOO", "XXX"]
     for row in rows:
         joined_row = "".join(row)
 
         if joined_row in won_sequence:
-            has_won = True
+            game_finished = True
             break
 
     # Vertical
     i = 0
     while i < 3:
         joined_row = row0[i] + row1[i] + row2[i]
-        print(joined_row)
 
         i += 1
         if joined_row in won_sequence:
-            has_won = True
+            game_finished = True
             break
 
     # Diagonal
     sequence_1 = row0[0] + row1[1] + row2[2]
     sequence_2 = row0[2] + row1[1] + row2[0]
     if sequence_1 in won_sequence or sequence_2 in won_sequence:
-        has_won = True
-    print(has_won)
+        game_finished = True
+    return game_finished
 
 
 # Controller
@@ -298,17 +300,20 @@ while user_turn_count < 10:
         loggable = log_user_input(user_turn, passed_first, passed_second)
 
         if loggable != False:
-            # Increase turn count
-            user_turn_count += 1
-            # Change turn
-            user_turn = not user_turn
-
             # Display the row
             display_rows()
 
             # Check if won
-            if user_turn_count > 0 + 1:
-                check_won(has_won)
+            if check_won(game_finished) == True:
+                # If won, break out
+                print("\n")
+                print(f"GAME OVER. PLAYER {get_user_name(user_turn)} WON")
+                break
+
+            # Increase turn count
+            user_turn_count += 1
+            # Change turn
+            user_turn = not user_turn
     # First validation failed
     else:
         pass
