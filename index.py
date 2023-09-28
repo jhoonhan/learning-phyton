@@ -180,9 +180,9 @@
 # Tik Tak Toe
 
 # rows
-row1 = ["O", "O", "O"]
-row2 = ["O", "O", "O"]
-row3 = ["O", "O", "O"]
+row1 = [" ", " ", " "]
+row2 = [" ", " ", " "]
+row3 = [" ", " ", " "]
 rows = [row1, row2, row3]
 
 
@@ -217,43 +217,79 @@ def input_validation(user_selection):
 
 
 # Log machine
-def log_user_input(row, column):
-    if rows[row][column] == "X":
+def log_user_input(user_turn, row, column):
+    # Guard
+    if rows[row][column] != " ":
         print("\n### Unavailable. The column is already taken ###")
-
         return False
+    # Based on User turn,
+    if user_turn == True:
+        rows[row][column] = "O"
     else:
         rows[row][column] = "X"
-        return True
+    return True
 
 
-# Keep asking for input
+# Validation Fn (str):Boolean
+def validate_input(user_input):
+    validated_input = input_validation(user_input)
+    if validated_input != None:
+        return validated_input
+    else:
+        return None
+
+
+# Check first validation : Boolean
+def first_validation():
+    # Ask for row and col
+    user_selection_row = input("Pick a row between 0,1,2 : ")
+    # Validate the input
+    return validate_input(user_selection_row)
+
+
+# Second stage
+def second_validation(passed_first):
+    if passed_first == None:
+        return False
+
+    user_selection_col = input(
+        f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : "
+    )
+    # Input validation: See if the input is empty string
+    return validate_input(user_selection_col)
+
+
+# Controller
 while user_turn_count < 10:
     print(f"\nCurrent turn: {user_turn_count}")
     print(f"User {user_turn}'s turn")
 
-    # Ask for row and col
-    user_selection_row = input("Pick a row between 0,1,2 : ")
-    # Input validation: See if the input is empty string
-    validated_input_row = input_validation(user_selection_row)
-    if validated_input_row != None:
-        user_selection_col = input(
-            f"\nYou have picked row {user_selection_row}, \nPick a column between 0,1,2 : "
-        )
-        # Input validation: See if the input is empty string
-        validated_input_col = input_validation(user_selection_col)
-        if validated_input_col != None:
-            # Log it to the rows
-            loggable = log_user_input(
-                int(validated_input_row), int(validated_input_col)
-            )
-            if loggable == True:
-                # Increase user count
-                user_turn_count += 1
-                # Change the turn
-                user_turn = not user_turn
-                display_rows()
-            else:
-                pass
-    else:
-        pass
+    passed_first = first_validation()
+    passed_second = second_validation(passed_first)
+
+    # # Ask for row and col
+    # user_selection_row = input("Pick a row between 0,1,2 : ")
+    # # Input validation: See if the input is empty string
+    # validated_input_row = input_validation(user_selection_row)
+    # # If Else for input
+    # if validated_input_row != None:
+    #     user_selection_col = input(
+    #         f"\nYou have picked row {user_selection_row}, \nPick a column between 0,1,2 : "
+    #     )
+    #     # Input validation: See if the input is empty string
+    #     validated_input_col = input_validation(user_selection_col)
+    #     if validated_input_col != None:
+    #         # Log it to the rows
+    #         loggable = log_user_input(
+    #             user_turn, int(validated_input_row), int(validated_input_col)
+    #         )
+    #         if loggable == True:
+    #             # Increase user count
+    #             user_turn_count += 1
+    #             # Change the turn
+    #             user_turn = not user_turn
+    #             display_rows()
+    #         else:
+    #             pass
+    # else:
+    #     pass
