@@ -196,6 +196,13 @@ user_selection_row = None
 user_selection_column = None
 
 
+def get_user_name(user_turn):
+    if user_turn == True:
+        return "O"
+    else:
+        return "X"
+
+
 # Input Validation 1: None || Number
 def input_validation(user_selection):
     if (
@@ -243,35 +250,40 @@ def display_rows():
 
 
 # Check if won
-def check_won():
+def check_won(has_won):
     # Horizontal
-    if user_turn_count == 0:
-        pass
-    else:
-        for row in rows:
-            if row[0] == row[1] == row[2]:
-                has_won = True
-                break
-            else:
-                pass
-        # Vertical
-        i = 0
-        while i > 3:
-            if row0[i] == row1[i] == row2[i]:
-                has_won = True
-                break
-            else:
-                pass
-        # Diagonal /
-        if row0[0] == row1[1] == row2[2] or row0[2] == row1[1] == row2[0]:
+    won_sequence = ["OOO", "XXX"]
+    for row in rows:
+        joined_row = "".join(row)
+
+        if joined_row in won_sequence:
             has_won = True
+            break
+
+    # Vertical
+    i = 0
+    while i < 3:
+        joined_row = row0[i] + row1[i] + row2[i]
+        print(joined_row)
+
+        i += 1
+        if joined_row in won_sequence:
+            has_won = True
+            break
+
+    # Diagonal
+    sequence_1 = row0[0] + row1[1] + row2[2]
+    sequence_2 = row0[2] + row1[1] + row2[0]
+    if sequence_1 in won_sequence or sequence_2 in won_sequence:
+        has_won = True
     print(has_won)
 
 
 # Controller
 while user_turn_count < 10:
     print(f"\nCurrent turn: {user_turn_count}")
-    print(f"User {user_turn}'s turn")
+
+    print(f"User {get_user_name(user_turn)}'s turn")
 
     passed_first = get_input("Pick a row between 0,1,2 : ")
     passed_second = None
@@ -295,7 +307,8 @@ while user_turn_count < 10:
             display_rows()
 
             # Check if won
-            check_won()
+            if user_turn_count > 0 + 1:
+                check_won(has_won)
     # First validation failed
     else:
         pass
