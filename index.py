@@ -180,20 +180,14 @@
 # Tik Tak Toe
 
 # rows
+row0 = [" ", " ", " "]
 row1 = [" ", " ", " "]
 row2 = [" ", " ", " "]
-row3 = [" ", " ", " "]
-rows = [row1, row2, row3]
-
-
-def display_rows():
-    print("\n")
-    print(row1)
-    print(row2)
-    print(row3)
+rows = [row0, row1, row2]
 
 
 # User Controller
+has_won = False
 user_turn = True
 user_turn_count = 0
 
@@ -202,7 +196,7 @@ user_selection_row = None
 user_selection_column = None
 
 
-# Input Validation 1: None || String
+# Input Validation 1: None || Number
 def input_validation(user_selection):
     if (
         user_selection.isdigit() == False
@@ -213,7 +207,17 @@ def input_validation(user_selection):
         print("\nWrong input. Must be a number and less than 3")
         return None
     else:
-        return user_selection
+        return int(user_selection)
+
+
+# Validation Fn (str):Boolean
+def get_input(message):
+    user_input = input(message)
+    validated_input = input_validation(user_input)
+    if validated_input != None:
+        return validated_input
+    else:
+        return None
 
 
 # Log machine
@@ -230,33 +234,38 @@ def log_user_input(user_turn, row, column):
     return True
 
 
-# Validation Fn (str):Boolean
-def validate_input(user_input):
-    validated_input = input_validation(user_input)
-    if validated_input != None:
-        return validated_input
+# Displays rows
+def display_rows():
+    print("\n")
+    print(row0)
+    print(row1)
+    print(row2)
+
+
+# Check if won
+def check_won():
+    # Horizontal
+    if user_turn_count == 0:
+        pass
     else:
-        return None
-
-
-# Check first validation : Boolean
-def first_validation():
-    # Ask for row and col
-    user_selection_row = input("Pick a row between 0,1,2 : ")
-    # Validate the input
-    return validate_input(user_selection_row)
-
-
-# Second stage
-def second_validation(passed_first):
-    if passed_first == None:
-        return False
-
-    user_selection_col = input(
-        f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : "
-    )
-    # Input validation: See if the input is empty string
-    return validate_input(user_selection_col)
+        for row in rows:
+            if row[0] == row[1] == row[2]:
+                has_won = True
+                break
+            else:
+                pass
+        # Vertical
+        i = 0
+        while i > 3:
+            if row0[i] == row1[i] == row2[i]:
+                has_won = True
+                break
+            else:
+                pass
+        # Diagonal /
+        if row0[0] == row1[1] == row2[2] or row0[2] == row1[1] == row2[0]:
+            has_won = True
+    print(has_won)
 
 
 # Controller
@@ -264,32 +273,29 @@ while user_turn_count < 10:
     print(f"\nCurrent turn: {user_turn_count}")
     print(f"User {user_turn}'s turn")
 
-    passed_first = first_validation()
-    passed_second = second_validation(passed_first)
+    passed_first = get_input("Pick a row between 0,1,2 : ")
+    passed_second = None
+    if passed_first != None:
+        passed_second = get_input(
+            f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : "
+        )
 
-    # # Ask for row and col
-    # user_selection_row = input("Pick a row between 0,1,2 : ")
-    # # Input validation: See if the input is empty string
-    # validated_input_row = input_validation(user_selection_row)
-    # # If Else for input
-    # if validated_input_row != None:
-    #     user_selection_col = input(
-    #         f"\nYou have picked row {user_selection_row}, \nPick a column between 0,1,2 : "
-    #     )
-    #     # Input validation: See if the input is empty string
-    #     validated_input_col = input_validation(user_selection_col)
-    #     if validated_input_col != None:
-    #         # Log it to the rows
-    #         loggable = log_user_input(
-    #             user_turn, int(validated_input_row), int(validated_input_col)
-    #         )
-    #         if loggable == True:
-    #             # Increase user count
-    #             user_turn_count += 1
-    #             # Change the turn
-    #             user_turn = not user_turn
-    #             display_rows()
-    #         else:
-    #             pass
-    # else:
-    #     pass
+    # All pased. Log the result, change turn, and add turn count
+    if passed_first != None and passed_second != None:
+        # Log result
+        loggable = log_user_input(user_turn, passed_first, passed_second)
+
+        if loggable != False:
+            # Increase turn count
+            user_turn_count += 1
+            # Change turn
+            user_turn = not user_turn
+
+            # Display the row
+            display_rows()
+
+            # Check if won
+            check_won()
+    # First validation failed
+    else:
+        pass
