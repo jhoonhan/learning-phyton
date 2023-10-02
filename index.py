@@ -178,14 +178,21 @@
 
 
 # Tik Tak Toe
+WON_SEQUENCE = ["OOO", "XXX"]
+
+# State Management
+game_state = {
+    "rows": {"row0": [" ", " ", " "], "row1": [" ", " ", " "], "row2": [" ", " ", " "]},
+    "game_finished": False,
+    "user_turn": True,
+    "user_turn_count": 0,
+}
 
 # rows
-row0 = [" ", " ", " "]
-row1 = [" ", " ", " "]
-row2 = [" ", " ", " "]
-rows = [row0, row1, row2]
-
-WON_SEQUENCE = ["OOO", "XXX"]
+# row0 = [" ", " ", " "]
+# row1 = [" ", " ", " "]
+# row2 = [" ", " ", " "]
+rows = [game_state.rows.row0, game_state.row.row1, game_state.row.row2]
 
 
 # User Controller
@@ -193,16 +200,14 @@ game_finished = False
 user_turn = True
 user_turn_count = 0
 
-# User Selection Controller
-user_selection_row = None
-user_selection_column = None
 
-
-def get_user_name(user_turn):
-    if user_turn == True:
-        return "O"
-    else:
-        return "X"
+class Helpers:
+    def get_user_name(self):
+        global user_turn
+        if user_turn == True:
+            return "O"
+        else:
+            return "X"
 
 
 class InputController:
@@ -233,6 +238,13 @@ class InputController:
         else:
             return None
 
+    def get_user_name(self):
+        global user_turn
+        if user_turn == True:
+            return "O"
+        else:
+            return "X"
+
 
 class GameLogic:
     def __init__(self, user_turn, row, column):
@@ -242,14 +254,14 @@ class GameLogic:
 
     def log_user_input(self):
         # Guard
-        if rows[self.row][self.column] != " ":
+        if game_state.rows[self.row][self.column] != " ":
             print("\n### Unavailable. The column is already taken ###")
             return False
         # Based on User turn,
         if self.user_turn == True:
-            rows[self.row][self.column] = "O"
+            game_state.rows[self.row][self.column] = "O"
         else:
-            rows[self.row][self.column] = "X"
+            game_state.rows[self.row][self.column] = "X"
         return True
 
     def check_won(self):
@@ -280,52 +292,30 @@ class GameLogic:
             game_finished = True
         return game_finished
 
-
-class GameStatus:
     def display_rows(self):
         print("\n")
-        print(row0)
-        print(row1)
-        print(row2)
+        print(game_state.rows.row0)
+        print(game_state.rows.row1)
+        print(game_state.rows.row2)
 
+    def increase_user_turn_count(self):
+        global user_turn_count
+        user_turn_count += 1
 
-# Check if won
-def check_won(game_finished):
-    # Horizontal
-    won_sequence = ["OOO", "XXX"]
-    for row in rows:
-        joined_row = "".join(row)
-
-        if joined_row in won_sequence:
-            game_finished = True
-            break
-
-    # Vertical
-    i = 0
-    while i < 3:
-        joined_row = row0[i] + row1[i] + row2[i]
-
-        i += 1
-        if joined_row in won_sequence:
-            game_finished = True
-            break
-
-    # Diagonal
-    sequence_1 = row0[0] + row1[1] + row2[2]
-    sequence_2 = row0[2] + row1[1] + row2[0]
-    if sequence_1 in won_sequence or sequence_2 in won_sequence:
-        game_finished = True
-    return game_finished
+    def switch_user_turn(self):
+        global user_turn
+        user_turn = not user_turn
 
 
 # Controller
 while user_turn_count < 10:
     print(f"\nCurrent turn: {user_turn_count}")
 
-    print(f"User {get_user_name(user_turn)}'s turn")
+    input_controller = InputController("Pick a row between 0,1,2 : ")
+    print(f"User {Helpers().get_user_name()}'s turn")
 
     # Validate first input
-    passed_first = InputController("Pick a row between 0,1,2 : ").get_input()
+    passed_first = input_controller.get_input()
 
     # Validate second input IF first validation succesful
     passed_second = None
@@ -341,23 +331,25 @@ while user_turn_count < 10:
         # Log result
         # loggable = log_user_input(user_turn, passed_first, passed_second)
         game_logic = GameLogic(user_turn, passed_first, passed_second)
-        loggable = game_logic.log_user_input()
+        is_loggable = game_logic.log_user_input()
 
-        if loggable != False:
+        if is_loggable != False:
             # Display the row
-            GameStatus().display_rows()
+            game_logic.display_rows()
 
             # Check if won
-            if game_logic.check_won(game_finished) == True:
+            if game_logic.check_won() == True:
                 # If won, break out
                 print("\n")
-                print(f"GAME OVER. PLAYER {get_user_name(user_turn)} WON")
+                print(f"GAME OVER. PLAYER {Helpers().get_user_name()} WON")
                 break
 
             # Increase turn count
-            user_turn_count += 1
+            game_logic.increase_user_turn_count()
+
             # Change turn
-            user_turn = not user_turn
+            game_logic.switch_user_turn()
+
     # First validation failed
     else:
         pass
