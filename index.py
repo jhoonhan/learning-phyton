@@ -185,6 +185,8 @@ row1 = [" ", " ", " "]
 row2 = [" ", " ", " "]
 rows = [row0, row1, row2]
 
+WON_SEQUENCE = ["OOO", "XXX"]
+
 
 # User Controller
 game_finished = False
@@ -208,11 +210,9 @@ class InputController:
         self,
         message,
     ):
-        print("init firing")
-
         self.message = message
 
-    def validation(user_selection):
+    def validation(self, user_selection):
         if (
             user_selection.isdigit() == False
             or user_selection == ""
@@ -225,8 +225,6 @@ class InputController:
             return int(user_selection)
 
     def get_input(self):
-        print("get_input firing")
-
         user_selection = input(self.message)
         result = self.validation(user_selection)
 
@@ -236,37 +234,59 @@ class InputController:
             return None
 
 
-# Validation Fn (str):Boolean
-# def get_input(message, check_previous=None):
-#     user_selection = input(message)
-#     validator = InputController(user_selection)
-#     validator.validation()
-# if validated_input != None:
-#     return validated_input
-# else:
-#     return None
+class GameLogic:
+    def __init__(self, user_turn, row, column):
+        self.user_turn = user_turn
+        self.row = row
+        self.column = column
+
+    def log_user_input(self):
+        # Guard
+        if rows[self.row][self.column] != " ":
+            print("\n### Unavailable. The column is already taken ###")
+            return False
+        # Based on User turn,
+        if self.user_turn == True:
+            rows[self.row][self.column] = "O"
+        else:
+            rows[self.row][self.column] = "X"
+        return True
+
+    def check_won(self):
+        global game_finished
+        # Horizontal
+        for row in rows:
+            joined_row = "".join(row)
+
+            if joined_row in WON_SEQUENCE:
+                game_finished = True
+                break
+        pass
+
+        # Vertical
+        i = 0
+        while i < 3:
+            joined_row = row0[i] + row1[i] + row2[i]
+
+            i += 1
+            if joined_row in WON_SEQUENCE:
+                game_finished = True
+                break
+
+        # Diagonal
+        sequence_1 = row0[0] + row1[1] + row2[2]
+        sequence_2 = row0[2] + row1[1] + row2[0]
+        if sequence_1 in WON_SEQUENCE or sequence_2 in WON_SEQUENCE:
+            game_finished = True
+        return game_finished
 
 
-# Log machine
-def log_user_input(user_turn, row, column):
-    # Guard
-    if rows[row][column] != " ":
-        print("\n### Unavailable. The column is already taken ###")
-        return False
-    # Based on User turn,
-    if user_turn == True:
-        rows[row][column] = "O"
-    else:
-        rows[row][column] = "X"
-    return True
-
-
-# Displays rows
-def display_rows():
-    print("\n")
-    print(row0)
-    print(row1)
-    print(row2)
+class GameStatus:
+    def display_rows(self):
+        print("\n")
+        print(row0)
+        print(row1)
+        print(row2)
 
 
 # Check if won
@@ -305,30 +325,30 @@ while user_turn_count < 10:
     print(f"User {get_user_name(user_turn)}'s turn")
 
     # Validate first input
-    passed_first = InputController("Pick a row between 0,1,2 : ")
-    print(passed_first.get_input())
+    passed_first = InputController("Pick a row between 0,1,2 : ").get_input()
 
     # Validate second input IF first validation succesful
     passed_second = None
     if passed_first != None:
-        passed_second = get_input(
-            f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : ",
-            True,
-        )
+        passed_second = InputController(
+            f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : "
+        ).get_input()
     else:
         pass
 
     # All pased. Log the result, change turn, and add turn count
     if passed_first != None and passed_second != None:
         # Log result
-        loggable = log_user_input(user_turn, passed_first, passed_second)
+        # loggable = log_user_input(user_turn, passed_first, passed_second)
+        game_logic = GameLogic(user_turn, passed_first, passed_second)
+        loggable = game_logic.log_user_input()
 
         if loggable != False:
             # Display the row
-            display_rows()
+            GameStatus().display_rows()
 
             # Check if won
-            if check_won(game_finished) == True:
+            if game_logic.check_won(game_finished) == True:
                 # If won, break out
                 print("\n")
                 print(f"GAME OVER. PLAYER {get_user_name(user_turn)} WON")
