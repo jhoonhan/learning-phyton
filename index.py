@@ -203,28 +203,48 @@ def get_user_name(user_turn):
         return "X"
 
 
-# Input Validation 1: None || Number
-def input_validation(user_selection):
-    if (
-        user_selection.isdigit() == False
-        or user_selection == ""
-        or user_selection == None
-        or int(user_selection) >= 3
+class InputController:
+    def __init__(
+        self,
+        message,
     ):
-        print("\nWrong input. Must be a number and less than 3")
-        return None
-    else:
-        return int(user_selection)
+        print("init firing")
+
+        self.message = message
+
+    def validation(user_selection):
+        if (
+            user_selection.isdigit() == False
+            or user_selection == ""
+            or user_selection == None
+            or int(user_selection) >= 3
+        ):
+            print("\nWrong input. Must be a number and less than 3")
+            return None
+        else:
+            return int(user_selection)
+
+    def get_input(self):
+        print("get_input firing")
+
+        user_selection = input(self.message)
+        result = self.validation(user_selection)
+
+        if result != None:
+            return result
+        else:
+            return None
 
 
 # Validation Fn (str):Boolean
-def get_input(message, check_previous=None):
-    user_input = input(message)
-    validated_input = input_validation(user_input)
-    if validated_input != None:
-        return validated_input
-    else:
-        return None
+# def get_input(message, check_previous=None):
+#     user_selection = input(message)
+#     validator = InputController(user_selection)
+#     validator.validation()
+# if validated_input != None:
+#     return validated_input
+# else:
+#     return None
 
 
 # Log machine
@@ -285,7 +305,8 @@ while user_turn_count < 10:
     print(f"User {get_user_name(user_turn)}'s turn")
 
     # Validate first input
-    passed_first = get_input("Pick a row between 0,1,2 : ")
+    passed_first = InputController("Pick a row between 0,1,2 : ")
+    print(passed_first.get_input())
 
     # Validate second input IF first validation succesful
     passed_second = None
