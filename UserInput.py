@@ -1,12 +1,15 @@
+from typing import Optional
+
+
 class UserInput:
-    def __init__(self, message, previous_passed=True):
+    def __init__(self, message: str, previous_passed=0):
         self.message = message
         self.previous_passed = previous_passed
 
     def validation(
         self,
-        user_selection,
-    ):
+        user_selection: str,
+    ) -> int:
         if (
             user_selection.isdigit() == False
             or user_selection == ""
@@ -14,13 +17,13 @@ class UserInput:
             or int(user_selection) >= 3
         ):
             print("\nWrong input. Must be a number and less than 3")
-            return None
+            return -1
         else:
             return int(user_selection)
 
-    def get_input(self):
-        if self.previous_passed == None:
-            return None
+    def get_input(self) -> int:
+        if self.previous_passed == -1:
+            return -1
         else:
             user_selection = input(self.message)
             return self.validation(user_selection)

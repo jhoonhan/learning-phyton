@@ -2,11 +2,10 @@
 from state import combined_state as state
 
 from UserInput import UserInput
-from Helpers import Helpers
 from GameLogic import GameLogic
 
 
-def game_controller():
+def game_controller() -> None:
     # Controller
     while state["user_turn_count"] < 10:
         game_logic = GameLogic(state)

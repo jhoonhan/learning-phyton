@@ -6,27 +6,27 @@ WON_SEQUENCE = ["OOO", "XXX"]
 class GameLogic:
     def __init__(self, state):
         self.state = state
-        self.user_turn = state["user_turn"]
+        self.user_turn: bool = state["user_turn"]
 
     # Display Functions
-    def display_game_status(self):
+    def display_game_status(self) -> None:
         print(f"\nCurrent turn: {self.state['user_turn_count']}")
         print(f"User {Helpers(self.state).get_user_name()}'s turn")
 
-    def display_rows(self):
+    def display_rows(self) -> None:
         print("\n")
         print(self.state["combined_rows"][0])
         print(self.state["combined_rows"][1])
         print(self.state["combined_rows"][2])
 
     # Game Logics
-    def increase_user_turn_count(self):
+    def increase_user_turn_count(self) -> None:
         self.state["user_turn_count"] += 1
 
-    def switch_user_turn(self):
+    def switch_user_turn(self) -> None:
         self.state["user_turn"] = not self.state["user_turn"]
 
-    def check_won(self):
+    def check_won(self) -> bool:
         # Horizontal
         for row in self.state["combined_rows"]:
             joined_row = "".join(row)
@@ -70,13 +70,13 @@ class GameLogic:
             print(f"GAME OVER. PLAYER {Helpers(self.state).get_user_name()} WON")
         return self.state["game_finished"]
 
-    def is_all_passed(self, selected_row, selected_col):
+    def is_all_passed(self, selected_row: int, selected_col: int) -> bool:
         if selected_row != None and selected_col != None:
             return True
         else:
             return False
 
-    def is_log_succesful(self, selected_row, selected_col):
+    def is_log_succesful(self, selected_row: int, selected_col: int) -> bool:
         if self.is_all_passed(selected_row, selected_col) == False:
             return False
         # Guard
