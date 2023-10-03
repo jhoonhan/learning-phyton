@@ -124,8 +124,17 @@ class GameLogic:
         game_state["user_turn"] = not game_state["user_turn"]
 
 
-# Controller
+def all_passed(passed_first, passed_second):
+    if passed_first != None and passed_second != None:
+        # Log result
+        # loggable = log_user_input(user_turn, passed_first, passed_second)
+        game_logic = GameLogic(game_state["user_turn"], passed_first, passed_second)
+        return game_logic.log_user_input()
+    else:
+        return False
 
+
+# Controller
 while game_state["user_turn_count"] < 10:
     print(f"\nCurrent turn: {game_state['user_turn_count']}")
 
