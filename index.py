@@ -25,13 +25,14 @@ class Helpers:
 
 
 class InputController:
-    def __init__(
-        self,
-        message,
-    ):
+    def __init__(self, message, previous_passed=True):
         self.message = message
+        self.previous_passed = previous_passed
 
-    def validation(self, user_selection):
+    def validation(
+        self,
+        user_selection,
+    ):
         if (
             user_selection.isdigit() == False
             or user_selection == ""
@@ -44,13 +45,11 @@ class InputController:
             return int(user_selection)
 
     def get_input(self):
-        user_selection = input(self.message)
-        result = self.validation(user_selection)
-
-        if result != None:
-            return result
-        else:
+        if self.previous_passed == None:
             return None
+        else:
+            user_selection = input(self.message)
+            return self.validation(user_selection)
 
 
 class GameLogic:
@@ -127,7 +126,6 @@ class GameLogic:
 def all_passed(passed_first, passed_second):
     if passed_first != None and passed_second != None:
         # Log result
-        # loggable = log_user_input(user_turn, passed_first, passed_second)
         game_logic = GameLogic(game_state["user_turn"], passed_first, passed_second)
         return game_logic.log_user_input()
     else:
@@ -138,22 +136,18 @@ def all_passed(passed_first, passed_second):
 while game_state["user_turn_count"] < 10:
     print(f"\nCurrent turn: {game_state['user_turn_count']}")
 
-    input_controller = InputController("Pick a row between 0,1,2 : ")
+    # input_controller = InputController("Pick a row between 0,1,2 : ")
     print(f"User {Helpers().get_user_name()}'s turn")
 
-    # Validate first input
-    passed_first = input_controller.get_input()
+    # Validate first and second input
+    passed_first = InputController("Pick a row between 0,1,2 : ").get_input()
+    passed_second = InputController(
+        f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : ",
+        passed_first,
+    ).get_input()
 
-    # Validate second input IF first validation succesful
-    passed_second = None
-    if passed_first != None:
-        passed_second = InputController(
-            f"\nYou have picked row {passed_first}, \nPick a column between 0,1,2 : "
-        ).get_input()
-    else:
-        pass
+    all_passed = all_passed(passed_first, passed_second)
 
-    # All pased. Log the result, change turn, and add turn count
     if passed_first != None and passed_second != None:
         # Log result
         # loggable = log_user_input(user_turn, passed_first, passed_second)
