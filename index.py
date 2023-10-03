@@ -192,7 +192,12 @@ game_state = {
 # row0 = [" ", " ", " "]
 # row1 = [" ", " ", " "]
 # row2 = [" ", " ", " "]
-rows = [game_state.rows.row0, game_state.row.row1, game_state.row.row2]
+
+rows = [
+    game_state["rows"]["row0"],
+    game_state["rows"]["row1"],
+    game_state["rows"]["row2"],
+]
 # this doesnt work
 
 
@@ -255,14 +260,14 @@ class GameLogic:
 
     def log_user_input(self):
         # Guard
-        if game_state.rows[self.row][self.column] != " ":
+        if rows[self.row][self.column] != " ":
             print("\n### Unavailable. The column is already taken ###")
             return False
         # Based on User turn,
         if self.user_turn == True:
-            game_state.rows[self.row][self.column] = "O"
+            rows[self.row][self.column] = "O"
         else:
-            game_state.rows[self.row][self.column] = "X"
+            rows[self.row][self.column] = "X"
         return True
 
     def check_won(self):
@@ -279,7 +284,11 @@ class GameLogic:
         # Vertical
         i = 0
         while i < 3:
-            joined_row = row0[i] + row1[i] + row2[i]
+            joined_row = (
+                game_state["rows"]["row0"][i]
+                + game_state["rows"]["row1"][i]
+                + game_state["rows"]["row2"][i]
+            )
 
             i += 1
             if joined_row in WON_SEQUENCE:
@@ -287,17 +296,25 @@ class GameLogic:
                 break
 
         # Diagonal
-        sequence_1 = row0[0] + row1[1] + row2[2]
-        sequence_2 = row0[2] + row1[1] + row2[0]
+        sequence_1 = (
+            game_state["rows"]["row0"][0]
+            + game_state["rows"]["row1"][1]
+            + game_state["rows"]["row2"][2]
+        )
+        sequence_2 = (
+            game_state["rows"]["row0"][2]
+            + game_state["rows"]["row1"][1]
+            + game_state["rows"]["row2"][0]
+        )
         if sequence_1 in WON_SEQUENCE or sequence_2 in WON_SEQUENCE:
             game_finished = True
         return game_finished
 
     def display_rows(self):
         print("\n")
-        print(game_state.rows.row0)
-        print(game_state.rows.row1)
-        print(game_state.rows.row2)
+        print(rows[0])
+        print(rows[1])
+        print(rows[2])
 
     def increase_user_turn_count(self):
         global user_turn_count
