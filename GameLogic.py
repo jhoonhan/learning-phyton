@@ -71,7 +71,7 @@ class GameLogic:
         return self.state["game_finished"]
 
     def is_all_passed(self, selected_row: int, selected_col: int) -> bool:
-        if selected_row != None and selected_col != None:
+        if selected_row != -1 and selected_col != -1:
             return True
         else:
             return False
