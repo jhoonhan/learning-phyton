@@ -34,33 +34,9 @@ class GameLogic:
 
         # Vertical
         Check_Won_Class.check_vertical()
-        # i = 0
-        # while i < 3:
-        #     joined_row = (
-        #         self.state["rows"]["row0"][i]
-        #         + self.state["rows"]["row1"][i]
-        #         + self.state["rows"]["row2"][i]
-        #     )
-
-        #     i += 1
-        #     if joined_row in WON_SEQUENCE:
-        #         self.state["game_finished"] = True
-        #         break
 
         # Diagonal
         Check_Won_Class.check_diagonal()
-        # sequence_1 = (
-        #     self.state["rows"]["row0"][0]
-        #     + self.state["rows"]["row1"][1]
-        #     + self.state["rows"]["row2"][2]
-        # )
-        # sequence_2 = (
-        #     self.state["rows"]["row0"][2]
-        #     + self.state["rows"]["row1"][1]
-        #     + self.state["rows"]["row2"][0]
-        # )
-        # if sequence_1 in WON_SEQUENCE or sequence_2 in WON_SEQUENCE:
-        #     self.state["game_finished"] = True
 
         # Game Over Message
         if self.state["game_finished"] == True:
@@ -94,8 +70,8 @@ class Check_Won:
     def __init__(self, state) -> None:
         self.state = state
 
+    # Horizontal
     def check_horizontal(self) -> None:
-        # Horizontal
         for row in self.state["combined_rows"]:
             joined_row = "".join(row)
 
@@ -104,6 +80,7 @@ class Check_Won:
                 break
         pass
 
+    # Vertical
     def check_vertical(self) -> None:
         i = 0
         while i < 3:
@@ -118,6 +95,7 @@ class Check_Won:
                 self.state["game_finished"] = True
                 break
 
+    # Diagonal
     def check_diagonal(self) -> None:
         sequence_1 = (
             self.state["rows"]["row0"][0]
