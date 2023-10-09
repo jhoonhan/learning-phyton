@@ -1,4 +1,5 @@
 from typing import Optional
+from Messages import Messages
 
 
 class UserInput:
@@ -16,7 +17,8 @@ class UserInput:
             or user_selection == None
             or int(user_selection) >= 3
         ):
-            print("\nWrong input. Must be a number and less than 3")
+            print(Messages().WRONG_INPUT)
+
             return -1
         else:
             return int(user_selection)

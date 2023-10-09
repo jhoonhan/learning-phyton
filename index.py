@@ -7,7 +7,7 @@ from Messages import Messages
 
 
 def game_controller() -> None:
-    Messages_Class = Messages(state)
+    Messages_Class = Messages()
     # Controller
     while state["user_turn_count"] < 10:
         game_logic = GameLogic(state)
@@ -16,8 +16,8 @@ def game_controller() -> None:
         game_logic.display_game_status()
 
         # Validate first and second input
-        validated_selected_row = UserInput(Messages_Class.SELECT_COL).get_input()
-        validated_selected_col = UserInput(
+        validated_selected_row: int = UserInput(Messages_Class.SELECT_COL).get_input()
+        validated_selected_col: int = UserInput(
             Messages_Class.SELECTED_ROW(validated_selected_row),
             validated_selected_row,
         ).get_input()

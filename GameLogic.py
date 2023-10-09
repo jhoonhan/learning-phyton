@@ -1,17 +1,17 @@
-from Helpers import Helpers
 from Messages import Messages
 
-WON_SEQUENCE = ["OOO", "XXX"]
+WON_SEQUENCE: list[str] = ["OOO", "XXX"]
 
 
 class GameLogic:
     def __init__(self, state):
         self.state = state
         self.user_turn: bool = state["user_turn"]
+        self.Messages_Class = Messages()
 
     # Display Functions
     def display_game_status(self) -> None:
-        print(Messages(self.state).GAME_CURRENT_STATUS())
+        print(self.Messages_Class.GAME_CURRENT_STATUS(self.state))
 
     def display_rows(self) -> None:
         print("\n")
@@ -66,7 +66,7 @@ class GameLogic:
 
         # Game Over Message
         if self.state["game_finished"] == True:
-            print(Messages(self.state).GAME_OVER())
+            print(self.Messages_Class.GAME_OVER(self.state))
 
         return self.state["game_finished"]
 
@@ -81,7 +81,7 @@ class GameLogic:
             return False
         # Guard
         if self.state["combined_rows"][selected_row][selected_col] != " ":
-            print(Messages(self.state).UNAVAILABLE_COL)
+            print(self.Messages_Class.UNAVAILABLE_COL)
             return False
         # Based on User turn,
         if self.user_turn == True:
