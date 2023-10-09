@@ -1,4 +1,5 @@
 from Helpers import Helpers
+from Messages import Messages
 
 WON_SEQUENCE = ["OOO", "XXX"]
 
@@ -10,8 +11,10 @@ class GameLogic:
 
     # Display Functions
     def display_game_status(self) -> None:
-        print(f"\nCurrent turn: {self.state['user_turn_count']}")
-        print(f"User {Helpers(self.state).get_user_name()}'s turn")
+        print(Messages(self.state).GAME_CURRENT_TURN())
+
+        # print(f"\nCurrent turn: {self.state['user_turn_count']}")
+        # print(f"User {Helpers(self.state).get_user_name()}'s turn")
 
     def display_rows(self) -> None:
         print("\n")
@@ -66,8 +69,8 @@ class GameLogic:
 
         # Game Over Message
         if self.state["game_finished"] == True:
-            print("\n")
-            print(f"GAME OVER. PLAYER {Helpers(self.state).get_user_name()} WON")
+            print(Messages(self.state).GAME_OVER())
+
         return self.state["game_finished"]
 
     def is_all_passed(self, selected_row: int, selected_col: int) -> bool:
@@ -81,7 +84,7 @@ class GameLogic:
             return False
         # Guard
         if self.state["combined_rows"][selected_row][selected_col] != " ":
-            print("\n### Unavailable. The column is already taken ###")
+            print(Messages(self.state).UNAVAILABLE_COL)
             return False
         # Based on User turn,
         if self.user_turn == True:
