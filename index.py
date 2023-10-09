@@ -3,9 +3,11 @@ from state import combined_state as state
 
 from UserInput import UserInput
 from GameLogic import GameLogic
+from Messages import Messages
 
 
 def game_controller() -> None:
+    Messages_Class = Messages(state)
     # Controller
     while state["user_turn_count"] < 10:
         game_logic = GameLogic(state)
@@ -14,9 +16,9 @@ def game_controller() -> None:
         game_logic.display_game_status()
 
         # Validate first and second input
-        validated_selected_row = UserInput("Pick a row between 0,1,2 : ").get_input()
+        validated_selected_row = UserInput(Messages_Class.SELECT_COL).get_input()
         validated_selected_col = UserInput(
-            f"\nYou have picked row {validated_selected_row}, \nPick a column between 0,1,2 : ",
+            Messages_Class.SELECTED_ROW(validated_selected_row),
             validated_selected_row,
         ).get_input()
 

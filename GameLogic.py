@@ -11,10 +11,7 @@ class GameLogic:
 
     # Display Functions
     def display_game_status(self) -> None:
-        print(Messages(self.state).GAME_CURRENT_TURN())
-
-        # print(f"\nCurrent turn: {self.state['user_turn_count']}")
-        # print(f"User {Helpers(self.state).get_user_name()}'s turn")
+        print(Messages(self.state).GAME_CURRENT_STATUS())
 
     def display_rows(self) -> None:
         print("\n")
