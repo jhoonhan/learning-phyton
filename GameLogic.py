@@ -27,42 +27,40 @@ class GameLogic:
         self.state["user_turn"] = not self.state["user_turn"]
 
     def check_won(self) -> bool:
+        # Class declaration
+        Check_Won_Class = Check_Won(self.state)
         # Horizontal
-        for row in self.state["combined_rows"]:
-            joined_row = "".join(row)
-
-            if joined_row in WON_SEQUENCE:
-                self.state["game_finished"] = True
-                break
-        pass
+        Check_Won_Class.check_horizontal()
 
         # Vertical
-        i = 0
-        while i < 3:
-            joined_row = (
-                self.state["rows"]["row0"][i]
-                + self.state["rows"]["row1"][i]
-                + self.state["rows"]["row2"][i]
-            )
+        Check_Won_Class.check_vertical()
+        # i = 0
+        # while i < 3:
+        #     joined_row = (
+        #         self.state["rows"]["row0"][i]
+        #         + self.state["rows"]["row1"][i]
+        #         + self.state["rows"]["row2"][i]
+        #     )
 
-            i += 1
-            if joined_row in WON_SEQUENCE:
-                self.state["game_finished"] = True
-                break
+        #     i += 1
+        #     if joined_row in WON_SEQUENCE:
+        #         self.state["game_finished"] = True
+        #         break
 
         # Diagonal
-        sequence_1 = (
-            self.state["rows"]["row0"][0]
-            + self.state["rows"]["row1"][1]
-            + self.state["rows"]["row2"][2]
-        )
-        sequence_2 = (
-            self.state["rows"]["row0"][2]
-            + self.state["rows"]["row1"][1]
-            + self.state["rows"]["row2"][0]
-        )
-        if sequence_1 in WON_SEQUENCE or sequence_2 in WON_SEQUENCE:
-            self.state["game_finished"] = True
+        Check_Won_Class.check_diagonal()
+        # sequence_1 = (
+        #     self.state["rows"]["row0"][0]
+        #     + self.state["rows"]["row1"][1]
+        #     + self.state["rows"]["row2"][2]
+        # )
+        # sequence_2 = (
+        #     self.state["rows"]["row0"][2]
+        #     + self.state["rows"]["row1"][1]
+        #     + self.state["rows"]["row2"][0]
+        # )
+        # if sequence_1 in WON_SEQUENCE or sequence_2 in WON_SEQUENCE:
+        #     self.state["game_finished"] = True
 
         # Game Over Message
         if self.state["game_finished"] == True:
@@ -89,3 +87,47 @@ class GameLogic:
         else:
             self.state["combined_rows"][selected_row][selected_col] = "X"
         return True
+
+
+# Refactor for check_won
+class Check_Won:
+    def __init__(self, state) -> None:
+        self.state = state
+
+    def check_horizontal(self) -> None:
+        # Horizontal
+        for row in self.state["combined_rows"]:
+            joined_row = "".join(row)
+
+            if joined_row in WON_SEQUENCE:
+                self.state["game_finished"] = True
+                break
+        pass
+
+    def check_vertical(self) -> None:
+        i = 0
+        while i < 3:
+            joined_row = (
+                self.state["rows"]["row0"][i]
+                + self.state["rows"]["row1"][i]
+                + self.state["rows"]["row2"][i]
+            )
+
+            i += 1
+            if joined_row in WON_SEQUENCE:
+                self.state["game_finished"] = True
+                break
+
+    def check_diagonal(self) -> None:
+        sequence_1 = (
+            self.state["rows"]["row0"][0]
+            + self.state["rows"]["row1"][1]
+            + self.state["rows"]["row2"][2]
+        )
+        sequence_2 = (
+            self.state["rows"]["row0"][2]
+            + self.state["rows"]["row1"][1]
+            + self.state["rows"]["row2"][0]
+        )
+        if sequence_1 in WON_SEQUENCE or sequence_2 in WON_SEQUENCE:
+            self.state["game_finished"] = True

@@ -1,6 +1,7 @@
 from Helpers import Helpers
 
 
+# Class for all messages
 class Messages:
     def __init__(self) -> None:
         self.PICK_A_ROW = "Pick a row between 0,1,2 : "
