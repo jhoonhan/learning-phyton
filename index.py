@@ -6,6 +6,16 @@ from GameLogic import GameLogic
 from Messages import Messages
 
 
+# Init AWS
+
+# Connection
+# Validation
+# Database
+
+# User Validation
+# How?
+
+
 def game_controller() -> None:
     Messages_Class = Messages()
     # Controller
