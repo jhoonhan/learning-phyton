@@ -7,6 +7,7 @@ from Messages import Messages
 
 
 # Init AWS
+# AWS Websocket
 
 # Connection
 # Validation
