@@ -7,6 +7,19 @@ gatewayapi = boto3.client("apigatewaymanagementapi", endpoint_url=URL)
 lambdaClient = boto3.client("lambda")
 
 
+# Invoke other lambda
+def invokeGameLogic(functionName: str, params):
+    combinedParams = {**params, functionName: functionName}
+    response = lambdaClient.invoke(
+        FunctionName="arn:aws:lambda:us-east-1:254832711870:function:ticTacToeWebsocket-gameLogic",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(combinedParams),
+    )
+    res = json.load(response["Payload"])
+
+    return res
+
+
 def lambda_handler(event, context):
     # fetching connectionId from event
     # connectionId = event["requestContext"].get("connectionId")
@@ -15,19 +28,6 @@ def lambda_handler(event, context):
     # loading JSON message
     msg = json.loads(event["body"])
     cmd = json.loads(event["body"])
-
-    # Invoke other lambda
-    # Invoke other lambda
-    inputParams = {"Test": "test"}
-
-    response = lambdaClient.invoke(
-        FunctionName="arn:aws:lambda:us-east-1:254832711870:function:ticTacToeWebsocket-gameLogic",
-        InvocationType="RequestResponse",
-        Payload=json.dumps(inputParams),
-    )
-
-    resFromChild = json.load(response["Payload"])
-    print(resFromChild)
 
     # Logic Allocation
     if "command" in cmd:
