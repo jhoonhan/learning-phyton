@@ -11,6 +11,7 @@ from Messages import Messages
 
 # Connection
 # wss connection
+# Define routes
 # Validation
 # Database
 
