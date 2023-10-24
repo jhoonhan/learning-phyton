@@ -9,13 +9,25 @@ lambdaClient = boto3.client("lambda")
 
 def lambda_handler(event, context):
     # fetching connectionId from event
-    connectionId = event["requestContext"].get("connectionId")
+    # connectionId = event["requestContext"].get("connectionId")
+    connectionId = "NUwHXe17oAMCEow="
 
     # loading JSON message
     msg = json.loads(event["body"])
     cmd = json.loads(event["body"])
 
     # Invoke other lambda
+    # Invoke other lambda
+    inputParams = {"Test": "test"}
+
+    response = lambdaClient.invoke(
+        FunctionName="arn:aws:lambda:us-east-1:254832711870:function:ticTacToeWebsocket-gameLogic",
+        InvocationType="RequestResponse",
+        Payload=json.dumps(inputParams),
+    )
+
+    resFromChild = json.load(response["Payload"])
+    print(resFromChild)
 
     # Logic Allocation
     if "command" in cmd:
