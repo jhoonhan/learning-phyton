@@ -8,12 +8,11 @@ lambdaClient = boto3.client("lambda")
 
 
 # Invoke other lambda
-def invokeGameLogic(functionName: str, params):
-    combinedParams = {**params, functionName: functionName}
+def invokeGameLogic(params):
     response = lambdaClient.invoke(
         FunctionName="arn:aws:lambda:us-east-1:254832711870:function:ticTacToeWebsocket-gameLogic",
         InvocationType="RequestResponse",
-        Payload=json.dumps(combinedParams),
+        Payload=json.dumps(params),
     )
     res = json.load(response["Payload"])
 
@@ -22,11 +21,9 @@ def invokeGameLogic(functionName: str, params):
 
 def lambda_handler(event, context):
     # fetching connectionId from event
-    # connectionId = event["requestContext"].get("connectionId")
-    connectionId = "NUwHXe17oAMCEow="
+    connectionId = event["requestContext"].get("connectionId")
 
     # loading JSON message
-    msg = json.loads(event["body"])
     cmd = json.loads(event["body"])
 
     # Logic Allocation
@@ -35,7 +32,14 @@ def lambda_handler(event, context):
 
         if command == "checkWon":
             r_msg = "checking if won"
-            post_message(connectionId, r_msg)
+            params = {"functionName": "checkWon"}
+            checkedWon = invokeGameLogic(params)
+            aang = checkedWon["body"]
+            print(aang)
+            aaang = json.loads(aang)
+            print(aaang["result"])
+
+            post_message(connectionId, checkedWon)
             return {"statusCode": 200}
         elif command == "aaang":
             r_msg = "aaang"
@@ -57,5 +61,5 @@ def lambda_handler(event, context):
 
 def post_message(connectionId, msg):
     gateway_resp = gatewayapi.post_to_connection(
-        ConnectionId=connectionId, Data=json.dumps({"message": msg})
+        ConnectionId=connectionId, Data=json.dumps({"data": msg})
     )
