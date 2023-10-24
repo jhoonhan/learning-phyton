@@ -4,6 +4,7 @@ import boto3
 # connection URL (i.e. backend URL)
 URL = "https://r9mzbnosmd.execute-api.us-east-1.amazonaws.com/dev"
 gatewayapi = boto3.client("apigatewaymanagementapi", endpoint_url=URL)
+lambdaClient = boto3.client("lambda")
 
 
 def lambda_handler(event, context):
@@ -14,15 +15,17 @@ def lambda_handler(event, context):
     msg = json.loads(event["body"])
     cmd = json.loads(event["body"])
 
+    # Invoke other lambda
+
     # Logic Allocation
     if "command" in cmd:
-        cmd = cmd["command"]
+        command = cmd["command"]
 
-        if cmd.lower() == "checkWon":
+        if command == "checkWon":
             r_msg = "checking if won"
             post_message(connectionId, r_msg)
             return {"statusCode": 200}
-        elif cmd.lower() == "aaang":
+        elif command == "aaang":
             r_msg = "aaang"
             post_message(connectionId, r_msg)
         else:
