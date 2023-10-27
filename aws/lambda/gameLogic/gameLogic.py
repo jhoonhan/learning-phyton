@@ -9,6 +9,10 @@ class GameLogic:
         self.user_turn: bool = state["user_turn"]
         self.Messages_Class = Messages()
 
+    # Tester
+    def tester(self):
+        return "TEST SUCCESS"
+
     # Display Functions
     def display_game_status(self) -> None:
         print(self.Messages_Class.GAME_CURRENT_STATUS(self.state))
