@@ -8,6 +8,7 @@ def lambda_handler(event, context):
 
     game_state = {
         "connectionId": {"S": connectionId},
+        "guestConnectionId": {"S": ""},
         "Rows": {
             "M": {
                 "row0": {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
@@ -15,9 +16,10 @@ def lambda_handler(event, context):
                 "row2": {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
             }
         },
+        "game_started": {"BOOL": False},
         "game_finished": {"BOOL": False},
         "user_turn": {"BOOL": True},
-        "user_turn_count": {"N": "0"},
+        "user_turn_count": {"N": 0},
     }
 
     client.put_item(
