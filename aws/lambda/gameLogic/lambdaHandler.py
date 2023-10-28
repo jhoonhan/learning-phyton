@@ -1,8 +1,6 @@
 import json
 import boto3
 
-from GameLogic import GameLogic
-
 
 # connection URL (i.e. backend URL)
 URL = "https://r9mzbnosmd.execute-api.us-east-1.amazonaws.com/dev"
@@ -14,7 +12,18 @@ def lambda_handler(event, context):
     # Get host and guest connectionIds
     connectionId = event["requestContext"].get("connectionId")
 
+    game_table = dynamoDbClient.get_item(
+        TableName="ticTacToe-games",
+        Key={
+            "connectionId": {"S": connectionId},
+        },
+    )
+    game_data = game_table["Item"]
+    guest_connection_id = game_data["guestConnectionId"]
+
     # Starts game
+    post_message(connectionId, "Game started. You are Player 0")
+    post_message(guest_connection_id, "Game started. You are Player 1")
 
     # handling if message does not exist
     return {
