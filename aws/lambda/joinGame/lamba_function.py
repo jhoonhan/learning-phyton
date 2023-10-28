@@ -25,5 +25,7 @@ def lambda_handler(event, context):
     except:
         return {
             "statusCode": 404,
-            "body": json.dumps(f"404: NO GAME FOUND"),
+            "body": json.dumps(
+                f"404: NO GAME FOUND. Please check the host connection ID"
+            ),
         }
