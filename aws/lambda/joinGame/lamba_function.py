@@ -14,13 +14,23 @@ def lambda_handler(event, context):
         host_connection_id = json.loads(event["body"]["host_connection_id"])
         print(host_connection_id)
 
-        response = dynamoDbClient.get_item(
+        response = dynamoDbClient.update_item(
             TableName="ticTacToe-games",
             Key={
-                "connectionId": {"S": "NhsENdDMoAMCL0Q="},
+                "connectionId": {"S": "host_connection_id"},
                 "guestConnectionId": {"S": "null"},
             },
+            UpdateExpression="SET guestConnectionId = :newGuestConnectionId",
+            ExpressionAttributeValues={":newGuestConnectionId": connectionId},
+            ReturnValues="UPDATED_NEW",
         )
+
+        return {
+            "statusCode": 200,
+            "body": json.dumps(
+                f"200: Connected to Game with Host ID: {host_connection_id}."
+            ),
+        }
 
     except:
         return {
