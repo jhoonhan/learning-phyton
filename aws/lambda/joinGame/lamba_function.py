@@ -25,13 +25,14 @@ def lambda_handler(event, context):
             ReturnValues="UPDATED_NEW",
         )
 
+        # Ask host to start the game
         msg = f"The guest[{connectionId}] has joined. Start the game by typing in the action, 'startGame'"
         post_message(host_connection_id, msg)
 
         return {
             "statusCode": 200,
             "body": json.dumps(
-                f"200: Connected to Game with Host ID: {host_connection_id}. \nWaiting on the host to start the game."
+                f"200: Connected to Game with Host ID: {host_connection_id}. Waiting on the host to start the game."
             ),
         }
     except:
@@ -43,5 +44,5 @@ def lambda_handler(event, context):
 
 def post_message(connectionId, msg):
     gateway_resp = gatewayapiClient.post_to_connection(
-        ConnectionId=connectionId, Data=json.dumps({"data": msg})
+        ConnectionId=connectionId, Data=json.dumps(msg)
     )
