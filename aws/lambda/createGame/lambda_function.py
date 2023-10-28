@@ -1,9 +1,12 @@
 import json
 import boto3
 
+URL = "https://r9mzbnosmd.execute-api.us-east-1.amazonaws.com/dev"
+gatewayapiClient = boto3.client("apigatewaymanagementapi", endpoint_url=URL)
+client = boto3.client("dynamodb")
+
 
 def lambda_handler(event, context):
-    client = boto3.client("dynamodb")
     connectionId = event["requestContext"].get("connectionId")
 
     game_state = {
@@ -26,6 +29,7 @@ def lambda_handler(event, context):
         TableName="ticTacToe-games",
         Item=game_state,
     )
+    post_message(connectionId, "You are connected")
 
     return {
         "statusCode": 200,
