@@ -9,21 +9,21 @@ dynamoDbClient = boto3.client("dynamodb")
 # Join Game
 def lambda_handler(event, context):
     connectionId = event["requestContext"].get("connectionId")
-    event_body = json.loads(event["body"])
 
-    response = dynamoDbClient.get_item(
-        TableName="ticTacToe-games", Key={"connectionId": {"S": "1234"}}
-    )
+    try:
+        host_connection_id = json.loads(event["body"]["host_connection_id"])
+        print(host_connection_id)
 
-    print(response)
+        response = dynamoDbClient.get_item(
+            TableName="ticTacToe-games",
+            Key={
+                "connectionId": {"S": "NhsENdDMoAMCL0Q="},
+                "guestConnectionId": {"S": "null"},
+            },
+        )
 
-    if "host_connection_id" in event_body:
-        return {
-            "statusCode": 200,
-            "body": json.dumps(f"HOST CONNECTION: {event_body['host_connection_id']}."),
-        }
-    else:
+    except:
         return {
             "statusCode": 404,
-            "body": json.dumps(f"NO GAME FOUND"),
+            "body": json.dumps(f"404: NO GAME FOUND"),
         }
