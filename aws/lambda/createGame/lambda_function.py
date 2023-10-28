@@ -9,7 +9,6 @@ dynamoDbClient = boto3.client("dynamodb")
 def lambda_handler(event, context):
     # print(event["requestContext"]["connectionId"])
     connectionId = event["requestContext"].get("connectionId")
-    print(connectionId)
 
     game_state = {
         "connectionId": {"S": connectionId},
