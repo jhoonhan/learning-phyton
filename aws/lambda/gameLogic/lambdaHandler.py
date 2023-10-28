@@ -3,6 +3,7 @@ import boto3
 
 from start_game import start_game
 from display_status import display_status
+from post_message import post_message
 
 
 # connection URL (i.e. backend URL)
@@ -45,11 +46,11 @@ def lambda_handler(event, context):
     command = event_body["command"]
     print(command)
 
+    # Start_game
     if command == "start_game":
         # start_game(gatewayapiClient, connection_id, guest_connection_id)
         display_status(game_data, gatewayapiClient, connection_id)
-
-    # Starts game
+        post_message(gatewayapiClient, connection_id, "")
 
     # handling if message does not exist
     return {
