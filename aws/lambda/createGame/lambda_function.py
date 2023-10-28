@@ -3,7 +3,7 @@ import boto3
 
 URL = "https://r9mzbnosmd.execute-api.us-east-1.amazonaws.com/dev"
 gatewayapiClient = boto3.client("apigatewaymanagementapi", endpoint_url=URL)
-client = boto3.client("dynamodb")
+dynamoDbClient = boto3.client("dynamodb")
 
 
 def lambda_handler(event, context):
@@ -27,11 +27,10 @@ def lambda_handler(event, context):
         "user_turn_count": {"N": "0"},
     }
 
-    client.put_item(
+    dynamoDbClient.put_item(
         TableName="ticTacToe-games",
         Item=game_state,
     )
-    post_message(connectionId, "You are connected")
 
     return {
         "statusCode": 200,
@@ -39,9 +38,3 @@ def lambda_handler(event, context):
             f"Game Created. Share this connection ID with your opponent: {connectionId}."
         ),
     }
-
-
-def post_message(connectionId, msg):
-    gateway_resp = gatewayapiClient.post_to_connection(
-        ConnectionId=connectionId, Data=json.dumps({"data": msg})
-    )
