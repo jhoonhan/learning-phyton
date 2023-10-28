@@ -18,10 +18,9 @@ def lambda_handler(event, context):
         TableName="ticTacToe-games",
         Key={
             "connectionId": {"S": host_connection_id},
-            "guestConnectionId": {"S": "null"},
         },
         UpdateExpression="SET guestConnectionId = :newGuestConnectionId",
-        ExpressionAttributeValues={":newGuestConnectionId": connectionId},
+        ExpressionAttributeValues={":newGuestConnectionId": {"S": connectionId}},
         ReturnValues="UPDATED_NEW",
     )
 

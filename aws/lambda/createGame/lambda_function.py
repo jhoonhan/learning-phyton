@@ -13,7 +13,7 @@ def lambda_handler(event, context):
     game_state = {
         "connectionId": {"S": connectionId},
         "guestConnectionId": {"S": "null"},
-        "Rows": {
+        "rows": {
             "M": {
                 "row0": {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
                 "row1": {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
