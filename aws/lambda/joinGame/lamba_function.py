@@ -11,6 +11,12 @@ def lambda_handler(event, context):
     connectionId = event["requestContext"].get("connectionId")
     event_body = json.loads(event["body"])
 
+    response = dynamoDbClient.get_item(
+        TableName="ticTacToe-games", Key={"connectionId": {"S": "1234"}}
+    )
+
+    print(response)
+
     if "host_connection_id" in event_body:
         return {
             "statusCode": 200,
