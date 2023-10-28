@@ -1,6 +1,8 @@
 import json
 import boto3
 
+from start_game import start_game
+
 
 # connection URL (i.e. backend URL)
 URL = "https://r9mzbnosmd.execute-api.us-east-1.amazonaws.com/dev"
@@ -18,22 +20,22 @@ def lambda_handler(event, context):
             "connectionId": {"S": connectionId},
         },
     )
+    # Finds guest connection ID
     game_data = game_table["Item"]
     guest_connection_id = game_data["guestConnectionId"]["S"]
 
+    # Finds command and execute
+    event_body = json.loads(event["body"])
+    # Guard clause
+    if "command" not in event_body:
+        return {
+            "statusCode": 404,
+            "body": json.dumps("No command found"),
+        }
+
+    command = event_body["command"]
+
     # Starts game
-    post_message(connectionId, "Game started. You are Player 0")
-    post_message(guest_connection_id, "Game started. You are Player 1")
+    start_game(gatewayapiClient, connectionId, guest_connection_id)
 
     # handling if message does not exist
-    return {
-        "statusCode": 200,
-        "body": json.dumps("workx"),
-        # "body": functionName
-    }
-
-
-def post_message(connectionId, msg):
-    gateway_resp = gatewayapiClient.post_to_connection(
-        ConnectionId=connectionId, Data=json.dumps(msg)
-    )
