@@ -19,7 +19,7 @@ def lambda_handler(event, context):
         },
     )
     game_data = game_table["Item"]
-    guest_connection_id = game_data["guestConnectionId"]
+    guest_connection_id = game_data["guestConnectionId"]["S"]
 
     # Starts game
     post_message(connectionId, "Game started. You are Player 0")
@@ -35,5 +35,5 @@ def lambda_handler(event, context):
 
 def post_message(connectionId, msg):
     gateway_resp = gatewayapiClient.post_to_connection(
-        ConnectionId=connectionId, Data=json.dumps({"data": msg})
+        ConnectionId=connectionId, Data=json.dumps(msg)
     )
