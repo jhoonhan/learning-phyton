@@ -3,7 +3,7 @@ import boto3
 
 # connection URL (i.e. backend URL)
 URL = "https://r9mzbnosmd.execute-api.us-east-1.amazonaws.com/dev"
-gatewayapi = boto3.client("apigatewaymanagementapi", endpoint_url=URL)
+gatewayapiClient = boto3.client("apigatewaymanagementapi", endpoint_url=URL)
 lambdaClient = boto3.client("lambda")
 
 
@@ -48,7 +48,7 @@ def lambda_handler(event, context):
             r_msg = "Thanks!"
             post_message(connectionId, r_msg)
             # closing the connection from server
-            response = gatewayapi.delete_connection(ConnectionId=connectionId)
+            response = gatewayapiClient.delete_connection(ConnectionId=connectionId)
             return {"statusCode": 200}
 
     else:
@@ -60,6 +60,6 @@ def lambda_handler(event, context):
 
 
 def post_message(connectionId, msg):
-    gateway_resp = gatewayapi.post_to_connection(
+    gateway_resp = gatewayapiClient.post_to_connection(
         ConnectionId=connectionId, Data=json.dumps({"data": msg})
     )
