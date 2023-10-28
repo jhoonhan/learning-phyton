@@ -9,6 +9,10 @@ from Test import Test
 def lambda_handler(event, context):
     functionName = event["functionName"]
     testStr = Test().tester()
+    # Get host and guest connectionIds
+    connectionId = event["requestContext"].get("connectionId")
+    event_body = json.loads(event["body"])
+    host_connection_id = event_body["host_connection_id"]
 
     # handling if message does not exist
     return {
