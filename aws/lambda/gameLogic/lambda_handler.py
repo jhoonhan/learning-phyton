@@ -6,6 +6,7 @@ from display_status import display_status
 from post_message import post_message
 from User_input import User_input
 from Messages import Messages
+from Game_logic import Game_logic
 
 
 # connection URL (i.e. backend URL)
@@ -17,26 +18,27 @@ dynamoDbClient = boto3.client("dynamodb")
 # Game Controller
 def lambda_handler(event, context):
     Messages_Class = Messages()
-    print("Step 1")
-
     # Get host and guest connectionIds
     connection_id = event["requestContext"].get("connectionId")
 
+    # State declaration
     game_table = dynamoDbClient.get_item(
         TableName="ticTacToe-games",
         Key={
             "connectionId": {"S": connection_id},
         },
     )
+    state = game_table["Item"]
     print("Step 2")
-    # Finds guest connection ID
-    game_data = game_table["Item"]
-    guest_connection_id = game_data["guestConnectionId"]["S"]
 
+    # Finds guest connection ID
+    guest_connection_id = state["guestConnectionId"]["S"]
+
+    #
+    #
     # Finds command and execute
     event_body = json.loads(event["body"])
-    # Guard clause
-    print("Step 3")
+    ## Guard clause
     if "command" not in event_body:
         return {
             "statusCode": 404,
@@ -53,7 +55,7 @@ def lambda_handler(event, context):
     if command == "start_game":
         # start_game(gatewayapiClient, connection_id, guest_connection_id)
         # Displays game
-        display_status(game_data, gatewayapiClient, connection_id)
+        display_status(state, gatewayapiClient, connection_id)
         post_message(gatewayapiClient, connection_id, "")
 
     # Game progresses
@@ -85,13 +87,16 @@ def lambda_handler(event, context):
             validated_row_data["value"],
         ).validation(data_col)
 
-        # Check if any of input is -1
+        ## Check if any of input is -1
         if validated_row_data["value"] == -1 or validated_col_data["value"] == -1:
             post_message(gatewayapiClient, connection_id, validated_row_data["message"])
             pass
 
-        print(validated_row_data["value"])
-        print(validated_col_data["data"])
+        # Data in process:
+        # validated_row_data["value"]
+        # validated_col_data["value"]
+
+        # Check if loggable
 
         # Log to table
 
