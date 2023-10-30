@@ -81,12 +81,16 @@ def lambda_handler(event, context):
         # Data Validation
 
         validated_row_data = UserInput(Messages_Class.SELECT_COL).validation(data_row)
-        validated_row_value = validated_row_data["data"]
+        validated_row_value: int = validated_row_data["data"]
 
-        validated_selected_col = UserInput(
+        validated_col_data = UserInput(
             Messages_Class.SELECTED_ROW(validated_row_value),
             validated_row_value,
         ).validation(data_col)
+        validated_col_value: int = validated_col_data["data"]
+
+        print(validated_row_value)
+        print(validated_col_data)
 
         # Log to table
         # log_to_table(connection_id, json_data)
