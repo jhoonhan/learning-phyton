@@ -72,7 +72,7 @@ def lambda_handler(event, context):
         if "data_row" not in event_body or "data_col" not in event_body:
             return {
                 "statusCode": 404,
-                "body": json.dumps("No data was provided"),
+                "body": json.dumps("No data was provided."),
             }
 
         data_row = event_body["data_row"]
@@ -97,7 +97,19 @@ def lambda_handler(event, context):
         # validated_col_data["value"]
 
         # Check if loggable
-
+        if Game_logic(state).is_log_succesful(
+            validated_row_data["value"], validated_col_data["value"]
+        ):
+            # Display the row
+            Game_logic(state).display_rows()
+            # Check if won
+            if Game_logic(state).check_won() == True:
+                # If won, break out
+                break
+            # Increase turn count
+            Game_logic(state).increase_user_turn_count()
+            # Change turn
+            Game_logic(state).switch_user_turn()
         # Log to table
 
     # handling if message does not exist
