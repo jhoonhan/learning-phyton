@@ -62,6 +62,16 @@ def lambda_handler(event, context):
 
         # Display status
 
+    if command == "log_progress":
+        if "data" not in event_body:
+            return {
+                "statusCode": 404,
+                "body": json.dumps("No data was provided"),
+            }
+        data = event_body["log"]
+
+        log_to_table(connection_id, data)
+
     # handling if message does not exist
     return {
         "statusCode": 200,
@@ -70,12 +80,26 @@ def lambda_handler(event, context):
 
 
 def log_to_table(connection_id: str, input):
-    dynamoDbClient.update_item(
+    print(input)
+
+    # Get current row data
+    game_table = dynamoDbClient.get_item(
         TableName="ticTacToe-games",
         Key={
             "connectionId": {"S": connection_id},
         },
-        UpdateExpression="SET guestConnectionId = :newGuestConnectionId",
-        ExpressionAttributeValues={":newGuestConnectionId": {"S": connection_id}},
-        ReturnValues="UPDATED_NEW",
     )
+    rows = game_table["rows"]
+    print(rows["L"])
+
+    # row_number = input["row"]
+    # col_number = input["col"]
+    # dynamoDbClient.update_item(
+    #     TableName="ticTacToe-games",
+    #     Key={
+    #         "connectionId": {"S": connection_id},
+    #     },
+    #     UpdateExpression="SET guestConnectionId = :newGuestConnectionId",
+    #     ExpressionAttributeValues={":newGuestConnectionId": {"S": connection_id}},
+    #     ReturnValues="UPDATED_NEW",
+    # )

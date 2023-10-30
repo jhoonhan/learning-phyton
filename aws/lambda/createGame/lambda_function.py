@@ -14,11 +14,11 @@ def lambda_handler(event, context):
         "connectionId": {"S": connectionId},
         "guestConnectionId": {"S": "null"},
         "rows": {
-            "M": {
-                "row0": {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
-                "row1": {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
-                "row2": {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
-            }
+            "L": [
+                {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
+                {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
+                {"L": [{"S": " "}, {"S": " "}, {"S": " "}]},
+            ]
         },
         "game_started": {"BOOL": False},
         "game_finished": {"BOOL": False},
