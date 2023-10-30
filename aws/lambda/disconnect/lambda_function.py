@@ -8,6 +8,10 @@ def lambda_handler(event, context):
         TableName="ticTacToe-connections",
         Key={"connectionId": {"S": event["requestContext"].get("connectionId")}},
     )
+    client.delete_item(
+        TableName="ticTacToe-games",
+        Key={"connectionId": {"S": event["requestContext"].get("connectionId")}},
+    )
 
     # TODO implement
     return {"statusCode": 200, "body": json.dumps("Hello from Lambda!")}
