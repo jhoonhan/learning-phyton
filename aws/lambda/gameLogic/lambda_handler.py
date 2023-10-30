@@ -4,7 +4,7 @@ import boto3
 from start_game import start_game
 from display_status import display_status
 from post_message import post_message
-from UserInput import UserInput
+from User_input import User_input
 from Messages import Messages
 
 
@@ -75,25 +75,25 @@ def lambda_handler(event, context):
 
         data_row = event_body["data_row"]
         data_col = event_body["data_col"]
-        print(data_row)
-        print(data_col)
 
         # Data Validation
-
-        validated_row_data = UserInput(Messages_Class.SELECT_COL).validation(data_row)
-        validated_row_value: int = validated_row_data["data"]
-
-        validated_col_data = UserInput(
-            Messages_Class.SELECTED_ROW(validated_row_value),
-            validated_row_value,
+        validated_row_data = User_input(
+            Messages_Class.SELECT_COL,
+        ).validation(data_row)
+        validated_col_data = User_input(
+            Messages_Class.SELECTED_ROW(validated_row_data["value"]),
+            validated_row_data["value"],
         ).validation(data_col)
-        validated_col_value: int = validated_col_data["data"]
 
-        print(validated_row_value)
-        print(validated_col_data)
+        # Check if any of input is -1
+        if validated_row_data["value"] == -1 or validated_col_data["value"] == -1:
+            post_message(gatewayapiClient, connection_id, validated_row_data["message"])
+            pass
+
+        print(validated_row_data["value"])
+        print(validated_col_data["data"])
 
         # Log to table
-        # log_to_table(connection_id, json_data)
 
     # handling if message does not exist
     return {

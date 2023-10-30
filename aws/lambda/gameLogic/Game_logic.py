@@ -3,11 +3,15 @@ from Messages import Messages
 WON_SEQUENCE: list[str] = ["OOO", "XXX"]
 
 
-class GameLogic:
+class Game_logic:
     def __init__(self, state):
         self.state = state
         self.user_turn: bool = state["user_turn"]
         self.Messages_Class = Messages()
+
+    # Tester
+    def tester(self):
+        return "TEST SUCCESS"
 
     # Display Functions
     def display_game_status(self) -> None:

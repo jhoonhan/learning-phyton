@@ -8,9 +8,9 @@ lambdaClient = boto3.client("lambda")
 
 
 # Invoke other lambda
-def invokeGameLogic(params):
+def invokeGame_logic(params):
     response = lambdaClient.invoke(
-        FunctionName="arn:aws:lambda:us-east-1:254832711870:function:ticTacToeWebsocket-gameLogic",
+        FunctionName="arn:aws:lambda:us-east-1:254832711870:function:ticTacToeWebsocket-Game_logic",
         InvocationType="RequestResponse",
         Payload=json.dumps(params),
     )
@@ -33,7 +33,7 @@ def lambda_handler(event, context):
         if command == "checkWon":
             r_msg = "checking if won"
             params = {"functionName": "checkWon"}
-            checkedWon = invokeGameLogic(params)
+            checkedWon = invokeGame_logic(params)
             aang = checkedWon["body"]
             print(aang)
             aaang = json.loads(aang)

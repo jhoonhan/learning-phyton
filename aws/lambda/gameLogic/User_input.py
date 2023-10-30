@@ -2,7 +2,7 @@ from typing import Optional
 from Messages import Messages
 
 
-class UserInput:
+class User_input:
     def __init__(self, message: str, previous_passed=0):
         self.message = message
         self.previous_passed = previous_passed
@@ -17,6 +17,6 @@ class UserInput:
             or input_data == None
             or int(input_data) >= 3
         ):
-            return {"data": -1, "message": Messages().WRONG_INPUT}
+            return {"value": -1, "message": Messages().WRONG_INPUT}
         else:
-            return {"data": int(input_data), "message": self.message}
+            return {"value": int(input_data), "message": self.message}
