@@ -4,6 +4,8 @@ import boto3
 from start_game import start_game
 from display_status import display_status
 from post_message import post_message
+from UserInput import UserInput
+from Messages import Messages
 
 
 # connection URL (i.e. backend URL)
@@ -14,6 +16,7 @@ dynamoDbClient = boto3.client("dynamodb")
 
 # Game Controller
 def lambda_handler(event, context):
+    Messages_Class = Messages()
     print("Step 1")
 
     # Get host and guest connectionIds
@@ -63,14 +66,30 @@ def lambda_handler(event, context):
         # Display status
 
     if command == "log_progress":
-        if "data" not in event_body:
+        # Chekcs if data was provided
+        if "data_row" not in event_body or "data_col" not in event_body:
             return {
                 "statusCode": 404,
                 "body": json.dumps("No data was provided"),
             }
-        data = event_body["log"]
 
-        log_to_table(connection_id, data)
+        data_row = event_body["data_row"]
+        data_col = event_body["data_col"]
+        print(data_row)
+        print(data_col)
+
+        # Data Validation
+
+        validated_row_data = UserInput(Messages_Class.SELECT_COL).validation(data_row)
+        validated_row_value = validated_row_data["data"]
+
+        validated_selected_col = UserInput(
+            Messages_Class.SELECTED_ROW(validated_row_value),
+            validated_row_value,
+        ).validation(data_col)
+
+        # Log to table
+        # log_to_table(connection_id, json_data)
 
     # handling if message does not exist
     return {
