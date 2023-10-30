@@ -42,18 +42,40 @@ def lambda_handler(event, context):
 
     print("Step 4")
 
+    #########################
     # Game Controller STARTS
     command = event_body["command"]
-    print(command)
 
     # Start_game
     if command == "start_game":
         # start_game(gatewayapiClient, connection_id, guest_connection_id)
+        # Displays game
         display_status(game_data, gatewayapiClient, connection_id)
         post_message(gatewayapiClient, connection_id, "")
+
+    # Game progresses
+    if command == "progress_game":
+        # Ask for input
+        post_message(gatewayapiClient, connection_id, "What's your move? ex:'1,2'.")
+
+        # Log that into the table
+
+        # Display status
 
     # handling if message does not exist
     return {
         "statusCode": 200,
         "body": json.dumps("Worked"),
     }
+
+
+def log_to_table(connection_id: str, input):
+    dynamoDbClient.update_item(
+        TableName="ticTacToe-games",
+        Key={
+            "connectionId": {"S": connection_id},
+        },
+        UpdateExpression="SET guestConnectionId = :newGuestConnectionId",
+        ExpressionAttributeValues={":newGuestConnectionId": {"S": connection_id}},
+        ReturnValues="UPDATED_NEW",
+    )
